@@ -1,5 +1,6 @@
 import java.util.Scanner;
 
+
 public class Calc {
     public static void main(String[] args){
 
@@ -28,14 +29,17 @@ public class Calc {
                 oper='*';
                 operstr="\\*";
             }
-        }
 
-        String[] num = input.split(operstr);
-        if (num.length>2){
-            System.out.println("Должно быть два значения");
+        }
+        if (operstr==""){
+            System.out.println("Нету знака");
             System.exit(0);
         }
-        if (num.length<2){
+
+
+
+        String[] num = input.split(operstr);
+        if (num.length!=2){
             System.out.println("Должно быть два значения");
             System.exit(0);
         }
@@ -43,38 +47,59 @@ public class Calc {
         int b = 0;
         int arab = 0;
         String rom = "";
+        int result = 0;
+        int resultArab = 0;
+
+        a = roman_arab(num[0]);
+        b = roman_arab(num[1]);
 
 
-
-
-
-            try {
-                if (Character.isDigit(arab)==true || arab!=0){
-                    System.out.println("Римские или арабские целые числа");
+        if (a==0 && b!=0){
+            System.out.println("Только римские или арабские цифры");
+            System.exit(0);
+        }
+        else if (a!=0 && b==0){
+            System.out.println("Только римские или арабские цифры");
+            System.exit(0);
+        }
+        else if (a == 0 && b == 0) {
+            boolean isOnlyDigits = true;
+            for(int i = 0; i < num[0].length() && isOnlyDigits; i++) {
+                if(!Character.isDigit(num[0].charAt(i))) {
+                    isOnlyDigits = false;
                 }
-                else {
-                    a = roman_arab(num[0]);
-                    b = roman_arab(num[1]);
-                    arab = calc(a, b, oper);
-                    rom = roman_arab(arab);
-                    System.out.println(rom);
-                    System.exit(0);
+            }
+            boolean isOnlyDigits1 = true;
+            for(int i = 0; i < num[1].length() && isOnlyDigits1; i++) {
+                if(!Character.isDigit(num[1].charAt(i))) {
+                    isOnlyDigits1 = false;
                 }
-
-                a = Integer.parseInt(num[0]);
-                b = Integer.parseInt(num[1]);
-                if (a>10 | b>10 | a<1 | b<1){
-                    System.out.println("Числа от 1 до 10");
-                    System.exit(0);
-                }
-                if (Character.isDigit(arab)==false){
-                    arab = calc(a, b, oper);
-                    System.out.println(arab);
-                }
-            } catch (NumberFormatException e){
-                System.out.println("Только целые числа");
             }
 
+            if (isOnlyDigits==true & isOnlyDigits1==true){
+                a = Integer.parseInt(num[0]);
+                b = Integer.parseInt(num[1]);
+                if (a > 10 | b > 10 | a < 1 | b <1) {
+                    System.out.println("Цифры от 1 до 10");
+                    System.exit(0);
+                }
+                resultArab = calc(a, b, oper);
+                System.out.println(resultArab);
+            }
+            else{
+                System.out.println("Только римские или арабские цифры от 1 до 10");
+                System.exit(0);
+            }
+            }
+        else {
+                result = calc(a, b, oper);
+                if (result <= 0) {
+                    System.out.println("Римские цифры только положительные");
+                    System.exit(0);
+                }
+                String resultRom = arab_roman(result);
+                System.out.println(resultRom);
+        }
     }
     public static int calc(int a, int b, char oper){
         int result = 0;
@@ -127,10 +152,13 @@ public class Calc {
             case "X":
                 result = 10;
                 break;
+            default:
+                result = 0;
+
         }
         return result;
     }
-    public static String roman_arab(int num) {
+    public static String arab_roman(int num) {
         int[] values = {1000,900,500,400,100,90,50,40,10,9,5,4,1};
         String[] romanLiterals = {"M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"};
         StringBuilder roman = new StringBuilder();
@@ -142,5 +170,4 @@ public class Calc {
         }
         return roman.toString();
     }
-
 }
