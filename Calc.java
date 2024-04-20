@@ -1,8 +1,8 @@
 import java.util.Scanner;
 
 
-public class Calc {
-    public static void main(String[] args){
+public class Main {
+    public static void main(String[] args) throws NumberFormatException{
 
         Scanner str = new Scanner(System.in);
         String input = str.nextLine();
@@ -29,15 +29,11 @@ public class Calc {
                 oper='*';
                 operstr="\\*";
             }
-
         }
         if (operstr==""){
             System.out.println("Нету знака");
             System.exit(0);
         }
-
-
-
         String[] num = input.split(operstr);
         if (num.length!=2){
             System.out.println("Должно быть два значения");
@@ -49,11 +45,8 @@ public class Calc {
         String rom = "";
         int result = 0;
         int resultArab = 0;
-
         a = roman_arab(num[0]);
         b = roman_arab(num[1]);
-
-
         if (a==0 && b!=0){
             System.out.println("Только римские или арабские цифры");
             System.exit(0);
@@ -75,7 +68,6 @@ public class Calc {
                     isOnlyDigits1 = false;
                 }
             }
-
             if (isOnlyDigits==true & isOnlyDigits1==true){
                 a = Integer.parseInt(num[0]);
                 b = Integer.parseInt(num[1]);
@@ -87,18 +79,17 @@ public class Calc {
                 System.out.println(resultArab);
             }
             else{
-                System.out.println("Только римские или арабские цифры от 1 до 10");
+                throw new NumberFormatException();
+            }
+        }
+        else {
+            result = calc(a, b, oper);
+            if (result <= 0) {
+                System.out.println("Римские цифры только положительные");
                 System.exit(0);
             }
-            }
-        else {
-                result = calc(a, b, oper);
-                if (result <= 0) {
-                    System.out.println("Римские цифры только положительные");
-                    System.exit(0);
-                }
-                String resultRom = arab_roman(result);
-                System.out.println(resultRom);
+            String resultRom = arab_roman(result);
+            System.out.println(resultRom);
         }
     }
     public static int calc(int a, int b, char oper){
@@ -154,7 +145,6 @@ public class Calc {
                 break;
             default:
                 result = 0;
-
         }
         return result;
     }
