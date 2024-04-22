@@ -1,8 +1,14 @@
 import java.util.Scanner;
 
-
 public class Main {
-    public static void main(String[] args) throws NumberFormatException{
+    public static void main(String[] args) throws Exception {
+
+
+        class ScannerException extends Exception{
+            public ScannerException(String mes) {
+                super(mes);
+            }
+        }
 
         Scanner str = new Scanner(System.in);
         String input = str.nextLine();
@@ -31,13 +37,11 @@ public class Main {
             }
         }
         if (operstr==""){
-            System.out.println("Нету знака");
-            System.exit(0);
+            throw new ScannerException("Нужно ввести операции:'+', '-', '*', '/'");
         }
         String[] num = input.split(operstr);
         if (num.length!=2){
-            System.out.println("Должно быть два значения");
-            System.exit(0);
+            throw new ScannerException("Должно быть два значения");
         }
         int a = 0;
         int b = 0;
@@ -48,12 +52,10 @@ public class Main {
         a = roman_arab(num[0]);
         b = roman_arab(num[1]);
         if (a==0 && b!=0){
-            System.out.println("Только римские или арабские цифры");
-            System.exit(0);
+            throw new ScannerException("Только римские или арабские цифры");
         }
         else if (a!=0 && b==0){
-            System.out.println("Только римские или арабские цифры");
-            System.exit(0);
+            throw new ScannerException("Только римские или арабские цифры");
         }
         else if (a == 0 && b == 0) {
             boolean isOnlyDigits = true;
@@ -72,8 +74,7 @@ public class Main {
                 a = Integer.parseInt(num[0]);
                 b = Integer.parseInt(num[1]);
                 if (a > 10 | b > 10 | a < 1 | b <1) {
-                    System.out.println("Цифры от 1 до 10");
-                    System.exit(0);
+                    throw new ScannerException("Цифры от 1 до 10");
                 }
                 resultArab = calc(a, b, oper);
                 System.out.println(resultArab);
@@ -85,8 +86,7 @@ public class Main {
         else {
             result = calc(a, b, oper);
             if (result <= 0) {
-                System.out.println("Римские цифры только положительные");
-                System.exit(0);
+                throw new ScannerException("Римские цифры только положительные");
             }
             String resultRom = arab_roman(result);
             System.out.println(resultRom);
@@ -148,6 +148,7 @@ public class Main {
         }
         return result;
     }
+
     public static String arab_roman(int num) {
         int[] values = {1000,900,500,400,100,90,50,40,10,9,5,4,1};
         String[] romanLiterals = {"M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"};
